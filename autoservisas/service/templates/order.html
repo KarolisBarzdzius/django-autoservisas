@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+    <p><strong>Automobilis:</strong> {{ order.car_id }}</p>
+        <p><strong>Uzsakomas:</strong> {{ order.client_id }}</p>
+    </hr>
+    </br>
+    </div>
+<div style="margin-left:20px;margin-top:20px">
+    <h4>Darbai:</h4>
+        {% for eilute in order.order_line_set.all %}
+          <hr>
+            <p><strong>Paslauga:</strong> {{ eilute.service_id }}</p>
+            <p>
+                <strong>Kiekis:</strong> {{ eilute.quantity }}<strong>
+                Kaina:</strong> {{ eilute.price }}</p>
+            <p><strong>Paslaugos kaina:</strong> {{ eilute.Sum }}</p>
+        {% endfor %}
+    <hr>
+    <h4>Is viso: {{ order.total_price }}</h4>
+    <hr>
+    <p><strong>Uzsakymo data:</strong> {{object.return_time}}</p>
+        {% if object.client_id == user %}
+            <div>
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'my_order_update' object.id %}">Redaguoti</a>
+              <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'my_order_delete' object.id %}">Ištrinti</a>
+            </div>
+        {% endif %}
+    <hr>
+    <h5>Komentarai:</h5>
+         {% if order.orderreview_set.all %}
+          {% for review in order.orderreview_set.all %}
+            <hr>
+            <p>{{ review.reviewer }}: {{ review.comment }}</p>
+          {% endfor %}
+            {% else %}
+              <p>Komentaru nera</p>
+            {% endif %}
+  </div>
+
+{% endblock %}
